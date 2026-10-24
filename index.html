@@ -4,14 +4,14 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Mike Jay-Vee Almonte · Data Analyst / Engineer</title>
-  <meta name="description" content="Data Analyst / Engineer in Quezon City, Philippines. I build dbt data marts, batch and streaming data pipelines, and Power BI / Metabase dashboards for retail and enterprise teams. Open to part-time remote work.">
+  <meta name="description" content="Data Analyst / Engineer in Quezon City, Philippines. I build dbt data marts, batch, streaming and CDC data pipelines, and Power BI / Metabase dashboards for retail and enterprise teams. Open to part-time remote work.">
   <meta name="author" content="Mike Jay-Vee Almonte">
   <meta name="theme-color" content="#faf8f5" media="(prefers-color-scheme: light)">
   <meta name="theme-color" content="#121110" media="(prefers-color-scheme: dark)">
 
   <meta property="og:type" content="website">
   <meta property="og:title" content="Mike Jay-Vee Almonte · Data Analyst / Engineer">
-  <meta property="og:description" content="I build dbt data marts, batch and streaming data pipelines, and BI dashboards that teams can trust.">
+  <meta property="og:description" content="I build dbt data marts, batch, streaming and CDC data pipelines, and BI dashboards that teams can trust.">
   <meta property="og:image" content="assets/img/executive-overview-1.png">
   <meta name="twitter:card" content="summary_large_image">
 
@@ -38,7 +38,7 @@
       "https://linkedin.com/in/mjalmonte2001",
       "https://github.com/almontemike2001-star"
     ],
-    "knowsAbout": ["SQL", "dbt", "Power BI", "DAX", "BigQuery", "ClickHouse", "PostgreSQL", "DuckDB", "Python", "Airflow", "Kafka", "Metabase", "Data modeling", "Data contracts"]
+    "knowsAbout": ["SQL", "dbt", "Power BI", "DAX", "BigQuery", "ClickHouse", "PostgreSQL", "DuckDB", "Python", "Airflow", "Kafka", "Debezium", "Dagster", "Metabase", "Data modeling", "Data contracts"]
   }
   </script>
 </head>
@@ -83,7 +83,7 @@
         <h1 id="hero-title">I turn raw operational data into reports teams can&nbsp;<em>trust</em>.</h1>
         <p class="lead">
           I'm <strong>Mike Jay-Vee Almonte</strong>, a Data Analyst / Engineer in Quezon City, Philippines.
-          I build dbt data marts, batch and streaming data pipelines, and Power BI and Metabase dashboards for retail and enterprise teams.
+          I build dbt data marts, batch, streaming and CDC data pipelines, and Power BI and Metabase dashboards for retail and enterprise teams.
         </p>
         <div class="hero-ctas">
           <a class="btn btn-primary" href="#project">See my projects
@@ -105,10 +105,10 @@
         <dl class="stat-grid">
           <div class="stat"><dt>Years in data &amp; BI</dt><dd><span data-count="2.5" data-decimals="1">2.5</span>+</dd></div>
           <div class="stat"><dt>Enterprise BI clients</dt><dd><span data-count="5">5</span></dd></div>
-          <div class="stat"><dt>dbt models built</dt><dd><span data-count="42">42</span></dd></div>
-          <div class="stat"><dt>dbt checks passing</dt><dd><span data-count="318">318</span></dd></div>
+          <div class="stat"><dt>dbt models built</dt><dd><span data-count="57">57</span></dd></div>
+          <div class="stat"><dt>dbt checks passing</dt><dd><span data-count="367">367</span></dd></div>
         </dl>
-        <p class="hero-card-foot mono"><span class="ok">✓</span> PASS=318 WARN=0 ERROR=0 · 2 projects</p>
+        <p class="hero-card-foot mono"><span class="ok">✓</span> PASS=367 WARN=0 ERROR=0 · 3 projects</p>
       </aside>
     </section>
 
@@ -466,8 +466,101 @@
       </div>
     </section>
 
+    <!-- ============ Project 3: Hatid ============ -->
+    <section class="section container" id="hatid" aria-labelledby="ht-title">
+      <div class="section-head reveal">
+        <p class="eyebrow">Project 3 · Change data capture</p>
+        <h2 id="ht-title">Hatid: a CDC lakehouse on ClickHouse</h2>
+        <p class="section-sub">
+          A synthetic food-delivery app whose database rows keep changing: orders update as they move to the door, customers delete their accounts, and a column is added mid-run.
+          Debezium captures every change from Postgres, Redpanda carries it to ClickHouse, dbt rebuilds current state and history, and Dagster orchestrates it with replication checks.
+          All data is synthetic.
+        </p>
+        <div class="project-links">
+          <a class="btn btn-primary" href="https://github.com/almontemike2001-star/hatid-cdc-lakehouse" target="_blank" rel="noopener">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 19c-4.3 1.4-4.3-2.5-6-3m12 5v-3.5c0-1 .1-1.4-.5-2 2.8-.3 5.5-1.4 5.5-6a4.6 4.6 0 0 0-1.3-3.2 4.2 4.2 0 0 0-.1-3.2s-1.1-.3-3.5 1.3a12 12 0 0 0-6.2 0C6.5 2.8 5.4 3.1 5.4 3.1a4.2 4.2 0 0 0-.1 3.2A4.6 4.6 0 0 0 4 9.5c0 4.6 2.7 5.7 5.5 6-.6.6-.6 1.2-.5 2V21"/></svg>
+            View source on GitHub
+          </a>
+          <a class="btn btn-ghost" href="https://almontemike2001-star.github.io/hatid-cdc-lakehouse/kpi_report.html" target="_blank" rel="noopener">Open the live KPI report</a>
+          <a class="btn btn-ghost" href="#ht-dashboards">See the dashboards</a>
+        </div>
+      </div>
+
+      <div class="panel reveal">
+        <div class="panel-head">
+          <h3>How the changes flow</h3>
+          <p class="hint">Select a stage to see what it does.</p>
+        </div>
+        <div class="pipeline" role="tablist" aria-label="Hatid pipeline stages" id="ht-pipeline"></div>
+        <div class="stage-detail" id="ht-stage-detail" role="tabpanel" aria-live="polite"></div>
+      </div>
+
+      <div class="kpi-row reveal" aria-label="Change data capture results">
+        <div class="kpi"><span class="kpi-label">Change events</span><span class="kpi-value" data-count="39964" data-format="int">39,964</span><span class="kpi-note">captured from Postgres</span></div>
+        <div class="kpi"><span class="kpi-label">Updates replicated</span><span class="kpi-value" data-count="27628" data-format="int">27,628</span><span class="kpi-note">orders change 4–5 times each</span></div>
+        <div class="kpi"><span class="kpi-label">p95 replication lag</span><span class="kpi-value" data-count="3.3" data-decimals="1" data-suffix=" s">3.3 s</span><span class="kpi-note">Postgres commit → ClickHouse</span></div>
+        <div class="kpi"><span class="kpi-label">Tables in sync</span><span class="kpi-value" data-count="5" data-suffix="/5">5/5</span><span class="kpi-note">row count and checksum match</span></div>
+      </div>
+
+      <div class="panel reveal">
+        <div class="panel-head"><h3>Engineering decisions for data that changes</h3></div>
+        <div class="decisions">
+          <div class="decision">
+            <h4>Changelog plus current state</h4>
+            <p>Every change is kept in an append-only changelog. Current state is a <code>ReplacingMergeTree</code> on the Postgres LSN, so the latest version wins and deleted rows drop out.</p>
+          </div>
+          <div class="decision">
+            <h4>History without snapshots</h4>
+            <p>Type 2 customer history and point-in-time restaurant ratings are rebuilt from the changelog, so each order carries the rating that applied when it was placed.</p>
+          </div>
+          <div class="decision">
+            <h4>Schema changes while running</h4>
+            <p>A tips column is added mid-run: ClickHouse first, then Postgres. The consumer pauses during the swap, so no message is lost.</p>
+          </div>
+          <div class="decision">
+            <h4>Prove it arrived</h4>
+            <p>Each run compares Postgres and ClickHouse with a checksum over every key and its last update time, so a missed update or delete fails, not just a missing row.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="panel reveal" id="ht-live-report">
+        <div class="panel-head chart-head">
+          <div>
+            <h3 id="ht-live-title">Live KPI report</h3>
+            <p class="hint">Interactive page built from the gold marts: hover the charts or open a table view.</p>
+          </div>
+          <a class="btn btn-ghost btn-sm" href="https://almontemike2001-star.github.io/hatid-cdc-lakehouse/kpi_report.html" target="_blank" rel="noopener">Open full screen
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"/></svg>
+          </a>
+        </div>
+        <div class="live-frame">
+          <iframe src="https://almontemike2001-star.github.io/hatid-cdc-lakehouse/kpi_report.html" title="Hatid live KPI report" loading="lazy" aria-labelledby="ht-live-title"></iframe>
+        </div>
+      </div>
+
+      <div class="panel reveal" id="ht-dashboards">
+        <div class="panel-head chart-head">
+          <div>
+            <h3>Metabase dashboards</h3>
+            <p class="hint">Select a screenshot to enlarge it.</p>
+          </div>
+          <div class="seg" role="tablist" aria-label="Hatid dashboard" id="ht-gallery-tabs">
+            <button type="button" role="tab" data-tab="ops" aria-selected="true">Operations</button>
+            <button type="button" role="tab" data-tab="people" aria-selected="false">Riders &amp; restaurants</button>
+            <button type="button" role="tab" data-tab="cdc" aria-selected="false">CDC health</button>
+          </div>
+        </div>
+        <div class="gallery" id="ht-gallery"></div>
+      </div>
+
+      <div class="stack-strip reveal" aria-label="Hatid stack">
+        <span>PostgreSQL</span><span>Debezium</span><span>Redpanda / Kafka</span><span>ClickHouse</span><span>dbt Core</span><span>Dagster</span><span>Metabase</span><span>Python</span><span>Docker</span><span>GitHub Actions</span>
+      </div>
+    </section>
+
     <!-- ============ Skills ============ -->
-    <section class="section" id="skills" aria-labelledby="skills-title">
+    <section class="section section-alt" id="skills" aria-labelledby="skills-title">
       <div class="container">
         <div class="section-head reveal">
           <p class="eyebrow">Skills</p>
@@ -476,7 +569,7 @@
         <div class="skills-grid">
           <div class="skill-group reveal">
             <h3>Data engineering</h3>
-            <ul class="chips"><li>ETL / ELT</li><li>Apache Airflow</li><li>dbt</li><li>Change data capture</li><li>Incremental loading</li><li>Kafka / Redpanda</li><li>Streaming ingestion</li><li>Medallion architecture</li><li>Data contracts</li><li>Data quality testing</li></ul>
+            <ul class="chips"><li>ETL / ELT</li><li>Apache Airflow</li><li>dbt</li><li>Change data capture</li><li>Incremental loading</li><li>Kafka / Redpanda</li><li>Debezium (CDC)</li><li>Dagster</li><li>Streaming ingestion</li><li>Medallion architecture</li><li>Data contracts</li><li>Data quality testing</li></ul>
           </div>
           <div class="skill-group reveal">
             <h3>Warehouses &amp; databases</h3>
@@ -521,7 +614,7 @@
     </section>
 
     <!-- ============ Contact ============ -->
-    <section class="section section-alt" id="contact" aria-labelledby="contact-title">
+    <section class="section" id="contact" aria-labelledby="contact-title">
       <div class="container">
       <div class="contact">
         <div class="contact-copy reveal">

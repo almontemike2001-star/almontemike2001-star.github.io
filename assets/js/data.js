@@ -153,3 +153,59 @@ window.POURSTREAM = {
     ]
   }
 };
+
+/* Hatid results (synthetic data, 1–3 Oct 2026). Source: hatid-cdc-lakehouse README "Sample run". */
+window.HATID = {
+  pipeline: [
+    {
+      id: 'ht-pg', name: 'Postgres app DB', tag: 'Source',
+      title: 'A delivery app whose rows keep changing',
+      body: 'A simulator plays the app: orders move through placed, accepted, ready, picked up and delivered (4–5 updates each), customers move city or delete their accounts, restaurant ratings drift, and a tips column is added mid-run.',
+      points: ['5 tables, logical replication enabled', 'Account deletion anonymises past orders', 'Deterministic, seeded workload']
+    },
+    {
+      id: 'ht-dbz', name: 'Debezium', tag: 'Capture',
+      title: 'Change data capture from the write-ahead log',
+      body: 'Debezium reads Postgres logical replication and emits one event per insert, update and delete, with the operation, LSN and commit time. An initial snapshot loads existing rows first.',
+      points: ['Full before-images, so deletes carry the whole row', 'Initial snapshot, then streaming', 'One Redpanda topic per table']
+    },
+    {
+      id: 'ht-ch', name: 'ClickHouse', tag: 'Bronze',
+      title: 'Changelog plus current state',
+      body: 'A Kafka engine table reads each topic. Every change lands in an append-only changelog with its raw JSON, and a ReplacingMergeTree keyed on the LSN keeps current state, so the latest version wins and deletes disappear.',
+      points: ['p95 replication lag about 3 s', 'Live schema change with no lost messages', 'Postgres ↔ ClickHouse checksum reconciliation']
+    },
+    {
+      id: 'ht-dbt', name: 'dbt', tag: 'Transform',
+      title: 'History rebuilt from the changelog',
+      body: 'Silver reads current state with FINAL. Gold rebuilds Type 2 customer history from the changelog and joins each order to the restaurant rating in effect when it was placed (ASOF join).',
+      points: ['15 models, 34 data tests', 'SCD2 without snapshots', 'PASS=49 · WARN=0 · ERROR=0']
+    },
+    {
+      id: 'ht-dagster', name: 'Dagster', tag: 'Orchestration',
+      title: 'Asset graph with replication checks',
+      body: 'Dagster runs app activity → CDC → silver → gold → report. Before dbt runs, it waits for ClickHouse to match Postgres and records the result as asset checks; every dbt test also appears as an asset check.',
+      points: ['Schedulable every 30 minutes', 'matches_postgres and replication_lag checks', 'CI runs dbt slim builds on pull requests']
+    },
+    {
+      id: 'ht-bi', name: 'Metabase', tag: 'BI',
+      title: 'Dashboards as code on ClickHouse',
+      body: 'Three dashboards built through the Metabase API: Delivery Operations, Riders & Restaurants, and CDC Health, with filters for date, city and cuisine.',
+      points: ['26 questions on the gold layer', 'On-time drops to ~57% at meal peaks', 'Live KPI report on GitHub Pages']
+    }
+  ],
+
+  gallery: {
+    ops: [
+      { src: 'assets/img/hatid-delivery-operations-1.png', w: 1100, h: 839, caption: 'Delivery Operations: KPIs, orders and on-time rate by hour, order-to-door time and GMV by city.' },
+      { src: 'assets/img/hatid-delivery-operations-2.png', w: 1100, h: 750, caption: 'Delivery Operations: cancellations, orders by cuisine and a city scorecard.' }
+    ],
+    people: [
+      { src: 'assets/img/hatid-riders-restaurants-1.png', w: 1100, h: 839, caption: 'Riders & Restaurants: top riders, on-time by vehicle, slowest kitchens and rejection rate by cuisine.' },
+      { src: 'assets/img/hatid-riders-restaurants-2.png', w: 1100, h: 750, caption: 'Rider and restaurant scorecards, including restaurant rating then vs now.' }
+    ],
+    cdc: [
+      { src: 'assets/img/hatid-cdc-health-1.png', w: 1100, h: 790, caption: 'CDC Health: change events by table and operation, replication lag, and per-table health.' }
+    ]
+  }
+};
