@@ -4,14 +4,14 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Mike Jay-Vee Almonte · Data Analyst / Engineer</title>
-  <meta name="description" content="Data Analyst / Engineer in Quezon City, Philippines. I build dbt data marts, data pipelines and Power BI / Metabase dashboards for retail and enterprise teams. Open to part-time remote work.">
+  <meta name="description" content="Data Analyst / Engineer in Quezon City, Philippines. I build dbt data marts, batch and streaming data pipelines, and Power BI / Metabase dashboards for retail and enterprise teams. Open to part-time remote work.">
   <meta name="author" content="Mike Jay-Vee Almonte">
   <meta name="theme-color" content="#faf8f5" media="(prefers-color-scheme: light)">
   <meta name="theme-color" content="#121110" media="(prefers-color-scheme: dark)">
 
   <meta property="og:type" content="website">
   <meta property="og:title" content="Mike Jay-Vee Almonte · Data Analyst / Engineer">
-  <meta property="og:description" content="I build dbt data marts, data pipelines and BI dashboards that teams can trust.">
+  <meta property="og:description" content="I build dbt data marts, batch and streaming data pipelines, and BI dashboards that teams can trust.">
   <meta property="og:image" content="assets/img/executive-overview-1.png">
   <meta name="twitter:card" content="summary_large_image">
 
@@ -38,7 +38,7 @@
       "https://linkedin.com/in/mjalmonte2001",
       "https://github.com/almontemike2001-star"
     ],
-    "knowsAbout": ["SQL", "dbt", "Power BI", "DAX", "BigQuery", "ClickHouse", "PostgreSQL", "Python", "Airflow", "Metabase", "Data modeling"]
+    "knowsAbout": ["SQL", "dbt", "Power BI", "DAX", "BigQuery", "ClickHouse", "PostgreSQL", "DuckDB", "Python", "Airflow", "Kafka", "Metabase", "Data modeling", "Data contracts"]
   }
   </script>
 </head>
@@ -83,7 +83,7 @@
         <h1 id="hero-title">I turn raw operational data into reports teams can&nbsp;<em>trust</em>.</h1>
         <p class="lead">
           I'm <strong>Mike Jay-Vee Almonte</strong>, a Data Analyst / Engineer in Quezon City, Philippines.
-          I build dbt data marts, data pipelines, and Power BI and Metabase dashboards for retail and enterprise teams.
+          I build dbt data marts, batch and streaming data pipelines, and Power BI and Metabase dashboards for retail and enterprise teams.
         </p>
         <div class="hero-ctas">
           <a class="btn btn-primary" href="#project">See my projects
@@ -105,10 +105,10 @@
         <dl class="stat-grid">
           <div class="stat"><dt>Years in data &amp; BI</dt><dd><span data-count="2.5" data-decimals="1">2.5</span>+</dd></div>
           <div class="stat"><dt>Enterprise BI clients</dt><dd><span data-count="5">5</span></dd></div>
-          <div class="stat"><dt>dbt models built</dt><dd><span data-count="30">30</span></dd></div>
-          <div class="stat"><dt>dbt checks passing</dt><dd><span data-count="269">269</span></dd></div>
+          <div class="stat"><dt>dbt models built</dt><dd><span data-count="42">42</span></dd></div>
+          <div class="stat"><dt>dbt checks passing</dt><dd><span data-count="318">318</span></dd></div>
         </dl>
-        <p class="hero-card-foot mono"><span class="ok">✓</span> PASS=269 WARN=0 ERROR=0</p>
+        <p class="hero-card-foot mono"><span class="ok">✓</span> PASS=318 WARN=0 ERROR=0 · 2 projects</p>
       </aside>
     </section>
 
@@ -145,14 +145,14 @@
             <svg viewBox="0 0 24 24"><path d="M4 6h6v4H4zM14 14h6v4h-6zM14 4h6v4h-6z"/><path d="M10 8h2v8h2M12 6h2"/></svg>
           </div>
           <h3>Pipelines &amp; data quality</h3>
-          <p>Incremental and CDC ingestion, medallion layers, and Airflow orchestration. Tests and reconciliations catch issues before they reach a dashboard.</p>
+          <p>Incremental, CDC and streaming (Kafka) ingestion, medallion layers, and Airflow orchestration. Data contracts, tests and reconciliations catch issues before they reach a dashboard.</p>
         </article>
         <article class="card reveal">
           <div class="card-icon" aria-hidden="true">
             <svg viewBox="0 0 24 24"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg>
           </div>
           <h3>BI &amp; KPI reporting</h3>
-          <p>Power BI (DAX, Power Query, RLS) and Metabase dashboards built on governed KPI definitions that hold up when stakeholders ask follow-up questions.</p>
+          <p>Power BI (DAX, Power Query, RLS) and Metabase dashboards, built as code where it helps, on governed KPI definitions that hold up when stakeholders ask follow-up questions.</p>
         </article>
       </div>
     </section>
@@ -443,11 +443,11 @@
         <div class="skills-grid">
           <div class="skill-group reveal">
             <h3>Data engineering</h3>
-            <ul class="chips"><li>ETL / ELT</li><li>Apache Airflow</li><li>dbt</li><li>Change data capture</li><li>Incremental loading</li><li>Medallion architecture</li><li>Data quality testing</li></ul>
+            <ul class="chips"><li>ETL / ELT</li><li>Apache Airflow</li><li>dbt</li><li>Change data capture</li><li>Incremental loading</li><li>Kafka / Redpanda</li><li>Streaming ingestion</li><li>Medallion architecture</li><li>Data contracts</li><li>Data quality testing</li></ul>
           </div>
           <div class="skill-group reveal">
             <h3>Warehouses &amp; databases</h3>
-            <ul class="chips"><li>ClickHouse</li><li>Google BigQuery</li><li>PostgreSQL</li><li>MySQL</li></ul>
+            <ul class="chips"><li>ClickHouse</li><li>Google BigQuery</li><li>PostgreSQL</li><li>DuckDB</li><li>MySQL</li><li>Parquet</li></ul>
           </div>
           <div class="skill-group reveal">
             <h3>Data modeling</h3>
@@ -455,11 +455,11 @@
           </div>
           <div class="skill-group reveal">
             <h3>Business intelligence</h3>
-            <ul class="chips"><li>Power BI</li><li>DAX</li><li>Power Query</li><li>Power BI Service</li><li>Row-level security</li><li>Metabase</li><li>KPI reporting</li></ul>
+            <ul class="chips"><li>Power BI</li><li>DAX</li><li>Power Query</li><li>Power BI Service</li><li>Row-level security</li><li>Metabase</li><li>Dashboards as code</li><li>KPI reporting</li></ul>
           </div>
           <div class="skill-group reveal">
             <h3>Programming &amp; tools</h3>
-            <ul class="chips"><li>SQL</li><li>Python</li><li>Git / GitHub</li><li>Docker</li></ul>
+            <ul class="chips"><li>SQL</li><li>Python</li><li>Pydantic</li><li>pytest</li><li>Git / GitHub</li><li>GitHub Actions (CI)</li><li>Docker</li></ul>
           </div>
           <div class="skill-group reveal">
             <h3>Cloud &amp; Microsoft</h3>
