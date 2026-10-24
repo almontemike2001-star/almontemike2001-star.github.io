@@ -22,11 +22,19 @@
     });
     $('#theme-toggle').setAttribute('aria-label', dark ? 'Switch to light theme' : 'Switch to dark theme');
   }
+  // Embedded live reports (same origin on GitHub Pages) follow the site's theme toggle.
+  function syncLiveFrames() {
+    $$('.live-frame iframe').forEach(function (f) {
+      try { f.contentDocument.documentElement.setAttribute('data-theme', currentTheme()); } catch (e) {}
+    });
+  }
+  $$('.live-frame iframe').forEach(function (f) { f.addEventListener('load', syncLiveFrames); });
   $('#theme-toggle').addEventListener('click', function () {
     var next = currentTheme() === 'dark' ? 'light' : 'dark';
     root.setAttribute('data-theme', next);
     try { localStorage.setItem('theme', next); } catch (e) {}
     syncThemeMeta();
+    syncLiveFrames();
   });
   syncThemeMeta();
 
