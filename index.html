@@ -56,7 +56,7 @@
       <ul class="nav-links" id="nav-links">
         <li><a href="#about">About</a></li>
         <li><a href="#experience">Experience</a></li>
-        <li><a href="#project">Project</a></li>
+        <li><a href="#project">Projects</a></li>
         <li><a href="#skills">Skills</a></li>
         <li><a href="#contact">Contact</a></li>
       </ul>
@@ -86,7 +86,7 @@
           I build dbt data marts, data pipelines, and Power BI and Metabase dashboards for retail and enterprise teams.
         </p>
         <div class="hero-ctas">
-          <a class="btn btn-primary" href="#project">See my project
+          <a class="btn btn-primary" href="#project">See my projects
             <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
           </a>
           <a class="btn btn-ghost" href="#contact">Get in touch</a>
@@ -225,7 +225,7 @@
     <!-- ============ Featured project ============ -->
     <section class="section container" id="project" aria-labelledby="project-title">
       <div class="section-head reveal">
-        <p class="eyebrow">Featured project</p>
+        <p class="eyebrow">Project 1 · Batch analytics</p>
         <h2 id="project-title">BeanFlow Coffee: a retail analytics platform</h2>
         <p class="section-sub">
           An end-to-end analytics platform for a simulated 120-store coffee chain, from the POS database to executive dashboards.
@@ -347,8 +347,94 @@
       </div>
     </section>
 
+    <!-- ============ Project 2: PourStream ============ -->
+    <section class="section section-alt" id="pourstream" aria-labelledby="ps-title">
+      <div class="container">
+        <div class="section-head reveal">
+          <p class="eyebrow">Project 2 · Streaming data</p>
+          <h2 id="ps-title">PourStream: a streaming order-event pipeline</h2>
+          <p class="section-sub">
+            BeanFlow is batch. PourStream covers the other half of data engineering: event streams.
+            Coffee-app orders flow through Kafka, are checked against a data contract, and land in a Parquet lake.
+            dbt then turns them into marts that stay correct when events arrive twice, hours late, or broken.
+            All data is synthetic.
+          </p>
+          <div class="project-links">
+            <a class="btn btn-primary" href="https://github.com/almontemike2001-star/pourstream-event-pipeline" target="_blank" rel="noopener">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 19c-4.3 1.4-4.3-2.5-6-3m12 5v-3.5c0-1 .1-1.4-.5-2 2.8-.3 5.5-1.4 5.5-6a4.6 4.6 0 0 0-1.3-3.2 4.2 4.2 0 0 0-.1-3.2s-1.1-.3-3.5 1.3a12 12 0 0 0-6.2 0C6.5 2.8 5.4 3.1 5.4 3.1a4.2 4.2 0 0 0-.1 3.2A4.6 4.6 0 0 0 4 9.5c0 4.6 2.7 5.7 5.5 6-.6.6-.6 1.2-.5 2V21"/></svg>
+              View source on GitHub
+            </a>
+            <a class="btn btn-ghost" href="https://almontemike2001-star.github.io/pourstream-event-pipeline/kpi_report.html" target="_blank" rel="noopener">Open the live KPI report</a>
+            <a class="btn btn-ghost" href="#ps-dashboards">See the dashboards</a>
+          </div>
+        </div>
+
+        <!-- Pipeline -->
+        <div class="panel reveal">
+          <div class="panel-head">
+            <h3>How the events flow</h3>
+            <p class="hint">Select a stage to see what it does.</p>
+          </div>
+          <div class="pipeline" role="tablist" aria-label="PourStream pipeline stages" id="ps-pipeline"></div>
+          <div class="stage-detail" id="ps-stage-detail" role="tabpanel" aria-live="polite"></div>
+        </div>
+
+        <!-- KPI tiles -->
+        <div class="kpi-row reveal" aria-label="Stream quality for one simulated week">
+          <div class="kpi"><span class="kpi-label">Messages streamed</span><span class="kpi-value" data-count="29569" data-format="int">29,569</span><span class="kpi-note">one simulated week, 12 stores</span></div>
+          <div class="kpi"><span class="kpi-label">Duplicates collapsed</span><span class="kpi-value" data-count="535" data-format="int">535</span><span class="kpi-note">1.8% of messages, none double-counted</span></div>
+          <div class="kpi"><span class="kpi-label">Late events handled</span><span class="kpi-value" data-count="862" data-format="int">862</span><span class="kpi-note">arrived 20 min to 6 h after the event</span></div>
+          <div class="kpi"><span class="kpi-label">Dead-lettered</span><span class="kpi-value" data-count="146" data-format="int">146</span><span class="kpi-note">rejected by the contract, kept for replay</span></div>
+        </div>
+
+        <!-- Decisions -->
+        <div class="panel reveal">
+          <div class="panel-head"><h3>Engineering decisions that keep the stream honest</h3></div>
+          <div class="decisions">
+            <div class="decision">
+              <h4>At-least-once in, exactly-once out</h4>
+              <p>Offsets are committed only after a batch is written, so a crash replays it instead of losing it. Silver keeps the first delivery of each <code>event_id</code>, so replays and client retries never double-count.</p>
+            </div>
+            <div class="decision">
+              <h4>Late events correct the past</h4>
+              <p>The incremental order fact rebuilds every order touched by new events from <em>all</em> of its events. A test proves the incremental table always equals a full rebuild.</p>
+            </div>
+            <div class="decision">
+              <h4>A contract at the door</h4>
+              <p>Every message must pass a typed Pydantic contract. Bad ones go to a dead-letter queue with the reason and raw payload, so nothing is silently dropped.</p>
+            </div>
+            <div class="decision">
+              <h4>Dashboards as code</h4>
+              <p>Gold marts are published to Postgres, and a script builds every Metabase question, filter and dashboard through the API, so the BI layer is versioned like the models.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Dashboards -->
+        <div class="panel reveal" id="ps-dashboards">
+          <div class="panel-head chart-head">
+            <div>
+              <h3>Metabase dashboards</h3>
+              <p class="hint">Select a screenshot to enlarge it.</p>
+            </div>
+            <div class="seg" role="tablist" aria-label="PourStream dashboard" id="ps-gallery-tabs">
+              <button type="button" role="tab" data-tab="ops" aria-selected="true">Operations</button>
+              <button type="button" role="tab" data-tab="funnel" aria-selected="false">Funnel &amp; menu</button>
+              <button type="button" role="tab" data-tab="health" aria-selected="false">Stream health</button>
+            </div>
+          </div>
+          <div class="gallery" id="ps-gallery"></div>
+        </div>
+
+        <!-- Stack -->
+        <div class="stack-strip reveal" aria-label="PourStream stack">
+          <span>Redpanda / Kafka</span><span>Python</span><span>Pydantic</span><span>Parquet</span><span>DuckDB</span><span>dbt Core</span><span>PostgreSQL</span><span>Metabase</span><span>Docker</span><span>GitHub Actions</span>
+        </div>
+      </div>
+    </section>
+
     <!-- ============ Skills ============ -->
-    <section class="section section-alt" id="skills" aria-labelledby="skills-title">
+    <section class="section" id="skills" aria-labelledby="skills-title">
       <div class="container">
         <div class="section-head reveal">
           <p class="eyebrow">Skills</p>
@@ -402,7 +488,8 @@
     </section>
 
     <!-- ============ Contact ============ -->
-    <section class="section container" id="contact" aria-labelledby="contact-title">
+    <section class="section section-alt" id="contact" aria-labelledby="contact-title">
+      <div class="container">
       <div class="contact">
         <div class="contact-copy reveal">
           <p class="eyebrow">Contact</p>
@@ -465,6 +552,7 @@
             <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M22 2 11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg>
           </button>
         </form>
+      </div>
       </div>
     </section>
   </main>

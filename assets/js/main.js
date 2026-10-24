@@ -52,6 +52,7 @@
   /* ---------- Active nav link ---------- */
   var linkMap = {};
   $$('.nav-links a').forEach(function (a) { linkMap[a.getAttribute('href').slice(1)] = a; });
+  linkMap.pourstream = linkMap.project;
   if ('IntersectionObserver' in window) {
     var spy = new IntersectionObserver(function (entries) {
       entries.forEach(function (en) {
@@ -104,47 +105,50 @@
     counters.filter(function (c) { return !c.closest('.reveal'); }).forEach(countUp);
   }
 
-  /* ---------- Pipeline ---------- */
-  var pipe = $('#pipeline'), detail = $('#stage-detail');
-  D.pipeline.forEach(function (s, i) {
-    var b = document.createElement('button');
-    b.type = 'button';
-    b.className = 'stage';
-    b.id = 'stage-' + s.id;
-    b.setAttribute('role', 'tab');
-    b.setAttribute('aria-controls', 'stage-detail');
-    b.innerHTML = '<span class="stage-num">' + String(i + 1).padStart(2, '0') + '</span>' +
-      '<span class="stage-tag">' + s.tag + '</span><span class="stage-name">' + s.name + '</span>';
-    b.addEventListener('click', function () { selectStage(i, true); });
-    pipe.appendChild(b);
-  });
-  var stages = $$('.stage', pipe);
-  function selectStage(i, focus) {
-    stages.forEach(function (b, j) {
-      var on = i === j;
-      b.setAttribute('aria-selected', String(on));
-      b.tabIndex = on ? 0 : -1;
-      b.classList.toggle('done', j < i);
+  /* ---------- Pipeline (one per project) ---------- */
+  function initPipeline(pipe, detail, data, startIndex) {
+    data.forEach(function (s, i) {
+      var b = document.createElement('button');
+      b.type = 'button';
+      b.className = 'stage';
+      b.id = 'stage-' + s.id;
+      b.setAttribute('role', 'tab');
+      b.setAttribute('aria-controls', detail.id);
+      b.innerHTML = '<span class="stage-num">' + String(i + 1).padStart(2, '0') + '</span>' +
+        '<span class="stage-tag">' + s.tag + '</span><span class="stage-name">' + s.name + '</span>';
+      b.addEventListener('click', function () { selectStage(i, true); });
+      pipe.appendChild(b);
     });
-    var s = D.pipeline[i];
-    detail.setAttribute('aria-labelledby', 'stage-' + s.id);
-    detail.innerHTML = '<div class="sd-copy"><p class="eyebrow">' + s.tag + ' · step ' + (i + 1) + ' of ' + D.pipeline.length + '</p>' +
-      '<h4>' + s.title + '</h4><p>' + s.body + '</p></div>' +
-      '<ul class="sd-points">' + s.points.map(function (p) { return '<li>' + p + '</li>'; }).join('') + '</ul>';
-    detail.classList.remove('swap'); void detail.offsetWidth; detail.classList.add('swap');
-    if (focus) stages[i].focus({ preventScroll: true });
+    var stages = $$('.stage', pipe);
+    function selectStage(i, focus) {
+      stages.forEach(function (b, j) {
+        var on = i === j;
+        b.setAttribute('aria-selected', String(on));
+        b.tabIndex = on ? 0 : -1;
+        b.classList.toggle('done', j < i);
+      });
+      var s = data[i];
+      detail.setAttribute('aria-labelledby', 'stage-' + s.id);
+      detail.innerHTML = '<div class="sd-copy"><p class="eyebrow">' + s.tag + ' · step ' + (i + 1) + ' of ' + data.length + '</p>' +
+        '<h4>' + s.title + '</h4><p>' + s.body + '</p></div>' +
+        '<ul class="sd-points">' + s.points.map(function (p) { return '<li>' + p + '</li>'; }).join('') + '</ul>';
+      detail.classList.remove('swap'); void detail.offsetWidth; detail.classList.add('swap');
+      if (focus) stages[i].focus({ preventScroll: true });
+    }
+    pipe.addEventListener('keydown', function (e) {
+      var i = stages.indexOf(document.activeElement);
+      if (i < 0) return;
+      var n = { ArrowRight: 1, ArrowDown: 1, ArrowLeft: -1, ArrowUp: -1 }[e.key];
+      if (e.key === 'Home') n = -i;
+      if (e.key === 'End') n = stages.length - 1 - i;
+      if (n === undefined) return;
+      e.preventDefault();
+      selectStage((i + n + stages.length) % stages.length, true);
+    });
+    selectStage(startIndex, false);
   }
-  pipe.addEventListener('keydown', function (e) {
-    var i = stages.indexOf(document.activeElement);
-    if (i < 0) return;
-    var n = { ArrowRight: 1, ArrowDown: 1, ArrowLeft: -1, ArrowUp: -1 }[e.key];
-    if (e.key === 'Home') n = -i;
-    if (e.key === 'End') n = stages.length - 1 - i;
-    if (n === undefined) return;
-    e.preventDefault();
-    selectStage((i + n + stages.length) % stages.length, true);
-  });
-  selectStage(4, false);
+  initPipeline($('#pipeline'), $('#stage-detail'), D.pipeline, 4);
+  initPipeline($('#ps-pipeline'), $('#ps-stage-detail'), window.POURSTREAM.pipeline, 2);
 
   /* ---------- Charts ---------- */
   function segmented(group, onPick) {
@@ -184,31 +188,34 @@
     { label: 'ADQ', num: true, get: function (r) { return C.fmt(r.adq, 'dec'); } }
   ], D.regions);
 
-  /* ---------- Gallery + lightbox ---------- */
-  var gallery = $('#gallery');
-  var tabs = $$('#gallery-tabs button');
+  /* ---------- Galleries (one per project) + shared lightbox ---------- */
   var currentSet = [];
-  function renderGallery(key) {
-    currentSet = D.gallery[key];
-    gallery.innerHTML = '';
-    currentSet.forEach(function (img, i) {
-      var b = document.createElement('button');
-      b.type = 'button';
-      b.className = 'shot' + (i === 0 ? ' shot-main' : '');
-      b.innerHTML = '<img src="' + img.src + '" width="' + img.w + '" height="' + img.h + '" alt="' + img.caption + '" loading="lazy" decoding="async">' +
-        '<span class="shot-cap">' + img.caption + '</span>';
-      b.addEventListener('click', function () { openLightbox(i, b); });
-      gallery.appendChild(b);
+  function initGallery(gallery, tabsEl, data, startKey) {
+    var tabs = $$('button', tabsEl);
+    function renderGallery(key) {
+      var set = data[key];
+      gallery.innerHTML = '';
+      set.forEach(function (img, i) {
+        var b = document.createElement('button');
+        b.type = 'button';
+        b.className = 'shot' + (i === 0 ? ' shot-main' : '');
+        b.innerHTML = '<img src="' + img.src + '" width="' + img.w + '" height="' + img.h + '" alt="' + img.caption + '" loading="lazy" decoding="async">' +
+          '<span class="shot-cap">' + img.caption + '</span>';
+        b.addEventListener('click', function () { openLightbox(set, i, b); });
+        gallery.appendChild(b);
+      });
+      gallery.classList.remove('swap'); void gallery.offsetWidth; gallery.classList.add('swap');
+    }
+    tabs.forEach(function (t) {
+      t.addEventListener('click', function () {
+        tabs.forEach(function (x) { x.setAttribute('aria-selected', String(x === t)); });
+        renderGallery(t.dataset.tab);
+      });
     });
-    gallery.classList.remove('swap'); void gallery.offsetWidth; gallery.classList.add('swap');
+    renderGallery(startKey);
   }
-  tabs.forEach(function (t) {
-    t.addEventListener('click', function () {
-      tabs.forEach(function (x) { x.setAttribute('aria-selected', String(x === t)); });
-      renderGallery(t.dataset.tab);
-    });
-  });
-  renderGallery('exec');
+  initGallery($('#gallery'), $('#gallery-tabs'), D.gallery, 'exec');
+  initGallery($('#ps-gallery'), $('#ps-gallery-tabs'), window.POURSTREAM.gallery, 'ops');
 
   var lb = $('#lightbox'), lbImg = $('img', lb), lbCap = $('figcaption', lb);
   var lbIndex = 0, lbReturn = null;
@@ -217,8 +224,8 @@
     lbImg.src = it.src; lbImg.alt = it.caption; lbCap.textContent = it.caption + '  (' + (lbIndex + 1) + ' / ' + currentSet.length + ')';
     $$('.lb-nav', lb).forEach(function (b) { b.hidden = currentSet.length < 2; });
   }
-  function openLightbox(i, from) {
-    lbIndex = i; lbReturn = from;
+  function openLightbox(set, i, from) {
+    currentSet = set; lbIndex = i; lbReturn = from;
     paintLightbox();
     lb.hidden = false;
     document.body.classList.add('no-scroll');

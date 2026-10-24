@@ -96,3 +96,61 @@ window.BEANFLOW = {
     ]
   }
 };
+
+/* PourStream results (synthetic data, default seed, 1–7 Oct 2026).
+   Source: pourstream-event-pipeline README "Sample run". */
+window.POURSTREAM = {
+  pipeline: [
+    {
+      id: 'ps-sim', name: 'Event simulator', tag: 'Source',
+      title: 'Ordering sessions with realistic faults',
+      body: 'A seeded simulator generates app, web and kiosk ordering sessions for 12 stores and sends them in arrival order, like a real broker would see them. It injects the faults a real stream has: client retries, phones that buffer events offline, and broken payloads.',
+      points: ['~29.6k messages per simulated week', '1.8% duplicates · 3% late · 0.5% malformed', 'Deterministic per seed, so tests can check exact totals']
+    },
+    {
+      id: 'ps-kafka', name: 'Redpanda', tag: 'Broker',
+      title: 'Kafka-compatible event stream',
+      body: 'Events go to a 3-partition topic keyed by session, so each session stays in order. The producer is idempotent. A file-backed broker with the same semantics lets the whole pipeline run offline and in CI.',
+      points: ['Kafka API through confluent-kafka', 'Keyed partitioning keeps per-session order', 'Redpanda Console for inspecting topics']
+    },
+    {
+      id: 'ps-loader', name: 'Python loader', tag: 'Ingestion',
+      title: 'Contract-validated micro-batches',
+      body: 'The loader polls batches, validates every message against a Pydantic data contract, and commits offsets only after the batch is safely written. A crash replays the batch, and the duplicates are removed downstream.',
+      points: ['At-least-once delivery, exactly-once results', 'Rejects typed as invalid_json, schema_violation or future_timestamp', 'Dead-letter queue keeps the raw payload for replay']
+    },
+    {
+      id: 'ps-lake', name: 'Parquet lake', tag: 'Bronze',
+      title: 'Append-only bronze layer',
+      body: 'Valid events and dead letters land as Parquet files, one per micro-batch, partitioned by ingest date. Files are written atomically, so readers never see a half-written batch.',
+      points: ['zstd-compressed Parquet', 'Kafka partition and offset kept on every row', 'Nothing is deleted or rewritten in bronze']
+    },
+    {
+      id: 'ps-dbt', name: 'dbt + DuckDB', tag: 'Transform',
+      title: 'Silver dedupe, late-data-aware gold',
+      body: 'Silver keeps the first delivery of each event_id. The incremental order fact rebuilds every order touched by newly arrived events from all of its events, so a payment that arrives six hours late corrects the order instead of being dropped.',
+      points: ['12 models, 35 data tests', 'Incremental = full refresh, proven by a test', 'PASS=49 · WARN=0 · ERROR=0']
+    },
+    {
+      id: 'ps-bi', name: 'Metabase', tag: 'BI',
+      title: 'Dashboards built as code',
+      body: 'Gold marts are published to a Postgres serving database, and a script builds three Metabase dashboards through the API: Store Operations, Customer Funnel & Menu, and Stream Health.',
+      points: ['28 questions with linked Date, Region, Store and Channel filters', 'Postgres serving layer, so BI never locks the warehouse', 'Rebuilt from code, so dashboards are reviewable in git']
+    }
+  ],
+
+  gallery: {
+    ops: [
+      { src: 'assets/img/pourstream-store-operations-1.png', w: 1100, h: 977, caption: 'Store Operations: KPIs, daily revenue, orders by hour, prep-time SLA breaches by store and cancellations.' },
+      { src: 'assets/img/pourstream-store-operations-2.png', w: 1100, h: 520, caption: 'Store Operations: scorecard for all 12 stores. Kiosk stores miss the 10-minute prep SLA about 4× as often.' }
+    ],
+    funnel: [
+      { src: 'assets/img/pourstream-customer-funnel-menu-1.png', w: 1100, h: 884, caption: 'Customer Funnel: session to pickup funnel, conversion by channel and by day.' },
+      { src: 'assets/img/pourstream-customer-funnel-menu-2.png', w: 1100, h: 842, caption: 'Menu: top items, units by category and item cart-to-order conversion.' }
+    ],
+    health: [
+      { src: 'assets/img/pourstream-stream-health-1.png', w: 1100, h: 930, caption: 'Stream Health: messages by outcome, late events, and dead letters by error type.' },
+      { src: 'assets/img/pourstream-stream-health-2.png', w: 1100, h: 427, caption: 'Stream Health: daily duplicates, late events, dead letters and arrival lag.' }
+    ]
+  }
+};
