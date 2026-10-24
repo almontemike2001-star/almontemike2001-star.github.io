@@ -73,26 +73,25 @@ window.BEANFLOW = {
     },
     {
       id: 'bi', name: 'Metabase', tag: 'BI',
-      title: 'Self-service dashboards',
-      body: 'Five business marts feed three Metabase dashboards: Executive Overview, Store Performance, and Product & Customer Analytics, including cohort retention and RFM segmentation.',
-      points: ['Read-only BigQuery service account', 'Filters by date, region, area, store', 'KPI definitions documented and tested']
+      title: 'Self-service dashboards, built as code',
+      body: 'Five business marts feed three Metabase dashboards: Executive Overview, Store Performance, and Product & Customer Analytics, including cohort retention and RFM segmentation. A script builds all 42 questions, filters and layouts through the Metabase API.',
+      points: ['Read-only BigQuery service account', 'Filters by date, region, area, store type and store', 'Totals reconcile with the validated KPIs']
     }
   ],
 
   gallery: {
     exec: [
-      { src: 'assets/img/executive-overview-1.png', w: 1010, h: 837, caption: 'Executive Overview: headline KPIs, daily sales and orders, and ADS vs ADQ.' },
-      { src: 'assets/img/executive-overview-2.png', w: 849, h: 273, caption: 'Executive Overview: gross margin trend by business day.' }
+      { src: 'assets/img/executive-overview-1.png', w: 1100, h: 839, caption: 'Executive Overview: one row of headline KPIs, daily sales and transactions, and daily ADS and ADQ.' },
+      { src: 'assets/img/executive-overview-2.png', w: 1100, h: 289, caption: 'Executive Overview: gross margin % by day and sales by day of week.' }
     ],
     store: [
-      { src: 'assets/img/store-performance-1.png', w: 994, h: 814, caption: 'Store Performance: KPI tiles, then sales, ADS and ADQ by region.' },
-      { src: 'assets/img/store-performance-2.png', w: 838, h: 797, caption: 'Store Performance: top 10 stores, sales by store type, and regional margin and trend.' },
-      { src: 'assets/img/store-performance-3.png', w: 763, h: 355, caption: 'Store Performance: detail table for all 115 stores.' }
+      { src: 'assets/img/store-performance-1.png', w: 1100, h: 885, caption: 'Store Performance: raw regional sales next to ADS per open store-day, top 10 stores by sales and bottom 10 by ADS.' },
+      { src: 'assets/img/store-performance-2.png', w: 1100, h: 612, caption: 'Store Performance: ADS by store type, gross margin % by region and daily ADS by region.' },
+      { src: 'assets/img/store-performance-3.png', w: 1100, h: 473, caption: 'Store Performance: scorecard for all 115 stores with sales, AOV, ADS, ADQ and margin %.' }
     ],
     product: [
-      { src: 'assets/img/product-customer-analytics-1.png', w: 972, h: 819, caption: 'Product Performance: units, sales, margin and top products by category.' },
-      { src: 'assets/img/product-customer-analytics-2.png', w: 953, h: 372, caption: 'Customer Retention: cohort retention matrix and cohort sizes.' },
-      { src: 'assets/img/product-customer-analytics-3.png', w: 939, h: 512, caption: 'Customer RFM: customers and sales by RFM segment.' }
+      { src: 'assets/img/product-customer-analytics-1.png', w: 1100, h: 976, caption: 'Products: units, sales, margin and selling price, top products, and sales and margin by category.' },
+      { src: 'assets/img/product-customer-analytics-2.png', w: 1100, h: 796, caption: 'Customers: RFM segments, cohort retention and spend by loyalty tier.' }
     ]
   }
 };
