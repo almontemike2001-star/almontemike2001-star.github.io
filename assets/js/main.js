@@ -62,6 +62,7 @@
   $$('.nav-links a').forEach(function (a) { linkMap[a.getAttribute('href').slice(1)] = a; });
   linkMap.pourstream = linkMap.project;
   linkMap.hatid = linkMap.project;
+  linkMap.bantay = linkMap.project;
   if ('IntersectionObserver' in window) {
     var spy = new IntersectionObserver(function (entries) {
       entries.forEach(function (en) {
@@ -159,6 +160,7 @@
   initPipeline($('#pipeline'), $('#stage-detail'), D.pipeline, 4);
   initPipeline($('#ps-pipeline'), $('#ps-stage-detail'), window.POURSTREAM.pipeline, 2);
   initPipeline($('#ht-pipeline'), $('#ht-stage-detail'), window.HATID.pipeline, 2);
+  initPipeline($('#bt-pipeline'), $('#bt-stage-detail'), window.BANTAY.pipeline, 3);
 
   /* ---------- Charts ---------- */
   function segmented(group, onPick) {
@@ -227,6 +229,7 @@
   initGallery($('#gallery'), $('#gallery-tabs'), D.gallery, 'exec');
   initGallery($('#ps-gallery'), $('#ps-gallery-tabs'), window.POURSTREAM.gallery, 'ops');
   initGallery($('#ht-gallery'), $('#ht-gallery-tabs'), window.HATID.gallery, 'ops');
+  initGallery($('#bt-gallery'), $('#bt-gallery-tabs'), window.BANTAY.gallery, 'flow');
 
   var lb = $('#lightbox'), lbImg = $('img', lb), lbCap = $('figcaption', lb);
   var lbIndex = 0, lbReturn = null;

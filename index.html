@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Mike Jay-Vee Almonte · Data Analyst / Engineer</title>
-  <meta name="description" content="Data Analyst / Engineer in Quezon City, Philippines. I build dbt data marts, batch, streaming and CDC data pipelines, and Power BI / Metabase dashboards for retail and enterprise teams. Open to part-time remote work.">
+  <meta name="description" content="Data Analyst / Engineer in Quezon City, Philippines. I build dbt data marts, batch, streaming and CDC data pipelines, n8n and LLM automations, and Power BI / Metabase dashboards for retail and enterprise teams. Open to part-time remote work.">
   <meta name="author" content="Mike Jay-Vee Almonte">
   <meta name="theme-color" content="#faf8f5" media="(prefers-color-scheme: light)">
   <meta name="theme-color" content="#121110" media="(prefers-color-scheme: dark)">
@@ -83,7 +83,7 @@
         <h1 id="hero-title">I turn raw operational data into reports teams can&nbsp;<em>trust</em>.</h1>
         <p class="lead">
           I'm <strong>Mike Jay-Vee Almonte</strong>, a Data Analyst / Engineer in Quezon City, Philippines.
-          I build dbt data marts, batch, streaming and CDC data pipelines, and Power BI and Metabase dashboards for retail and enterprise teams.
+          I build dbt data marts, batch, streaming and CDC data pipelines, document automation with n8n and LLMs, and Power BI and Metabase dashboards for retail and enterprise teams.
         </p>
         <div class="hero-ctas">
           <a class="btn btn-primary" href="#project">See my projects
@@ -105,10 +105,10 @@
         <dl class="stat-grid">
           <div class="stat"><dt>Years in data &amp; BI</dt><dd><span data-count="2.5" data-decimals="1">2.5</span>+</dd></div>
           <div class="stat"><dt>Enterprise BI clients</dt><dd><span data-count="5">5</span></dd></div>
-          <div class="stat"><dt>dbt models built</dt><dd><span data-count="57">57</span></dd></div>
-          <div class="stat"><dt>dbt checks passing</dt><dd><span data-count="367">367</span></dd></div>
+          <div class="stat"><dt>dbt models built</dt><dd><span data-count="74">74</span></dd></div>
+          <div class="stat"><dt>dbt checks passing</dt><dd><span data-count="426">426</span></dd></div>
         </dl>
-        <p class="hero-card-foot mono"><span class="ok">✓</span> PASS=367 WARN=0 ERROR=0 · 3 projects</p>
+        <p class="hero-card-foot mono"><span class="ok">✓</span> PASS=426 WARN=0 ERROR=0 · 4 projects</p>
       </aside>
     </section>
 
@@ -559,6 +559,99 @@
       </div>
     </section>
 
+    <!-- ============ Project 4: Bantay ============ -->
+    <section class="section container" id="bantay" aria-labelledby="bt-title">
+      <div class="section-head reveal">
+        <p class="eyebrow">Project 4 · Automation and AI</p>
+        <h2 id="bt-title">Bantay: supplier document automation with n8n and an LLM</h2>
+        <p class="section-sub">
+          Suppliers email certificates, insurance and invoices as PDFs. n8n schedules the work, a rules parser and a local LLM read every document, and validation decides what can be trusted without a person.
+          Accepted certificates drive expiry alerts and CRM follow-up tasks, through outboxes that never send twice.
+          All data is synthetic.
+        </p>
+        <div class="project-links">
+          <a class="btn btn-primary" href="https://github.com/almontemike2001-star/bantay-document-automation" target="_blank" rel="noopener">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 19c-4.3 1.4-4.3-2.5-6-3m12 5v-3.5c0-1 .1-1.4-.5-2 2.8-.3 5.5-1.4 5.5-6a4.6 4.6 0 0 0-1.3-3.2 4.2 4.2 0 0 0-.1-3.2s-1.1-.3-3.5 1.3a12 12 0 0 0-6.2 0C6.5 2.8 5.4 3.1 5.4 3.1a4.2 4.2 0 0 0-.1 3.2A4.6 4.6 0 0 0 4 9.5c0 4.6 2.7 5.7 5.5 6-.6.6-.6 1.2-.5 2V21"/></svg>
+            View source on GitHub
+          </a>
+          <a class="btn btn-ghost" href="https://almontemike2001-star.github.io/bantay-document-automation/kpi_report.html" target="_blank" rel="noopener">Open the live KPI report</a>
+          <a class="btn btn-ghost" href="#bt-dashboards">See the screens</a>
+        </div>
+      </div>
+
+      <div class="panel reveal">
+        <div class="panel-head">
+          <h3>How a document is handled</h3>
+          <p class="hint">Select a stage to see what it does.</p>
+        </div>
+        <div class="pipeline" role="tablist" aria-label="Bantay pipeline stages" id="bt-pipeline"></div>
+        <div class="stage-detail" id="bt-stage-detail" role="tabpanel" aria-live="polite"></div>
+      </div>
+
+      <div class="kpi-row reveal" aria-label="Document automation results">
+        <div class="kpi"><span class="kpi-label">Handled automatically</span><span class="kpi-value" data-count="81.4" data-decimals="1" data-suffix="%">81.4%</span><span class="kpi-note">315 of 387 documents</span></div>
+        <div class="kpi"><span class="kpi-label">Automatic decisions correct</span><span class="kpi-value" data-count="315" data-suffix="/315">315/315</span><span class="kpi-note">every field, vs ground truth</span></div>
+        <div class="kpi"><span class="kpi-label">Unknown CRM outcomes</span><span class="kpi-value" data-count="46" data-format="int">46</span><span class="kpi-note">timeouts and 5xx, all resolved</span></div>
+        <div class="kpi"><span class="kpi-label">Duplicates in the CRM</span><span class="kpi-value" data-count="0" data-format="int">0</span><span class="kpi-note">lookup before every retry</span></div>
+      </div>
+
+      <div class="panel reveal">
+        <div class="panel-head"><h3>Engineering decisions for AI you can trust</h3></div>
+        <div class="decisions">
+          <div class="decision">
+            <h4>The LLM is never the only check</h4>
+            <p>Business rules validate every result, and where the rules parser can read the layout, both readers must agree. Alone, the LLM got 84% of documents fully right; with the checks, nothing wrong was accepted automatically.</p>
+          </div>
+          <div class="decision">
+            <h4>Let the model copy, let code parse</h4>
+            <p>Forcing the small model to output ISO dates made it scramble digits. It now copies dates as printed, and code parses them with the document&rsquo;s own format hint (US forms print MM/DD/YYYY).</p>
+          </div>
+          <div class="decision">
+            <h4>Unknown means unknown</h4>
+            <p>A timeout or 5xx from the CRM is not a failure. The worker searches the CRM for the record&rsquo;s key, and retries only after two lookups confirm it never landed.</p>
+          </div>
+          <div class="decision">
+            <h4>People stay in the loop</h4>
+            <p>Documents that need judgement go to a review page with the reason, both readings and the PDF. Corrections pass the same validation before they are accepted.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="panel reveal" id="bt-live-report">
+        <div class="panel-head chart-head">
+          <div>
+            <h3 id="bt-live-title">Live KPI report</h3>
+            <p class="hint">Interactive page built from the dbt marts: hover the charts or open a table view.</p>
+          </div>
+          <a class="btn btn-ghost btn-sm" href="https://almontemike2001-star.github.io/bantay-document-automation/kpi_report.html" target="_blank" rel="noopener">Open full screen
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"/></svg>
+          </a>
+        </div>
+        <div class="live-frame">
+          <iframe src="https://almontemike2001-star.github.io/bantay-document-automation/kpi_report.html" title="Bantay live KPI report" loading="lazy" aria-labelledby="bt-live-title"></iframe>
+        </div>
+      </div>
+
+      <div class="panel reveal" id="bt-dashboards">
+        <div class="panel-head chart-head">
+          <div>
+            <h3>Workflows, review queue and dashboards</h3>
+            <p class="hint">Select a screenshot to enlarge it.</p>
+          </div>
+          <div class="seg" role="tablist" aria-label="Bantay screens" id="bt-gallery-tabs">
+            <button type="button" role="tab" data-tab="flow" aria-selected="true">n8n &amp; review</button>
+            <button type="button" role="tab" data-tab="ops" aria-selected="false">Operations</button>
+            <button type="button" role="tab" data-tab="compliance" aria-selected="false">Compliance</button>
+          </div>
+        </div>
+        <div class="gallery" id="bt-gallery"></div>
+      </div>
+
+      <div class="stack-strip reveal" aria-label="Bantay stack">
+        <span>n8n</span><span>Python</span><span>FastAPI</span><span>Ollama (Qwen 2.5)</span><span>Claude API</span><span>PostgreSQL</span><span>dbt Core</span><span>Metabase</span><span>Docker</span><span>GitHub Actions</span>
+      </div>
+    </section>
+
     <!-- ============ Skills ============ -->
     <section class="section section-alt" id="skills" aria-labelledby="skills-title">
       <div class="container">
@@ -586,6 +679,10 @@
           <div class="skill-group reveal">
             <h3>Programming &amp; tools</h3>
             <ul class="chips"><li>SQL</li><li>Python</li><li>Pydantic</li><li>pytest</li><li>Git / GitHub</li><li>GitHub Actions (CI)</li><li>Docker</li></ul>
+          </div>
+          <div class="skill-group reveal">
+            <h3>Automation &amp; AI</h3>
+            <ul class="chips"><li>n8n</li><li>REST APIs &amp; webhooks</li><li>FastAPI</li><li>LLM extraction (Ollama, Claude)</li><li>Human-in-the-loop review</li><li>Outbox &amp; idempotent retries</li></ul>
           </div>
           <div class="skill-group reveal">
             <h3>Cloud &amp; Microsoft</h3>

@@ -209,3 +209,60 @@ window.HATID = {
     ]
   }
 };
+
+window.BANTAY = {
+  pipeline: [
+    {
+      id: 'bt-mail', name: 'Email inbox', tag: 'Intake',
+      title: 'Suppliers email PDFs, as they really do',
+      body: 'Forty synthetic suppliers email certificates, insurance and invoices in eight different layouts, including prose letters. Some files are re-sent, some certificates arrive twice in a new layout, some lack an expiry date, and a few senders are not suppliers at all.',
+      points: ['299 emails, 387 unique PDFs over 90 days', 'Each file stored once (SHA-256)', 'One transaction per email']
+    },
+    {
+      id: 'bt-n8n', name: 'n8n', tag: 'Orchestration',
+      title: 'Workflows as code',
+      body: 'Four n8n workflows, kept as JSON in the repo and imported on start: inbox polling every 5 minutes, daily compliance alerts at 07:00 Manila, CRM sync, and an error workflow that emails operations. Each also has a "run now" webhook.',
+      points: ['Schedules + webhooks', 'Advisory lock per job: overlapping runs skip', 'Error workflow emails operations']
+    },
+    {
+      id: 'bt-llm', name: 'Rules + LLM', tag: 'Extraction',
+      title: 'Two readers, neither trusted alone',
+      body: 'A rules parser reads labelled layouts exactly and refuses to guess on prose. A local LLM (Qwen 2.5 3B via Ollama, or Claude) reads everything into a fixed JSON schema, copying dates as printed so code can parse them with the document’s own format hint.',
+      points: ['Rules alone: 88.6% of documents fully correct', 'LLM alone: 83.7%', '2.3 s per document on a laptop']
+    },
+    {
+      id: 'bt-decide', name: 'Validation', tag: 'Decision',
+      title: 'Accepted only if the rules and both readers agree',
+      body: 'Every result is checked against the supplier master and business rules: plausible validity period, due date after the invoice date, invoice number not the PO number. Where both readers could read the layout they must agree on every key field. Anything else goes to a person.',
+      points: ['81.4% handled automatically', '315 of 315 automatic decisions fully correct', '72 sent to the review queue with a reason']
+    },
+    {
+      id: 'bt-out', name: 'Alerts + CRM', tag: 'Actions',
+      title: 'Outboxes that never send twice',
+      body: 'Certificates trigger alerts at 30, 14 and 7 days and on expiry, emailed through an outbox. Supplier updates and follow-up tasks go to a HubSpot-style CRM that injects rate limits, 500s and timeouts. Unknown outcomes are looked up before any retry.',
+      points: ['76 alert emails, each sent once', '46 unknown CRM outcomes recovered', '0 duplicate CRM records']
+    },
+    {
+      id: 'bt-bi', name: 'dbt + Metabase', tag: 'BI',
+      title: 'Measured against ground truth',
+      body: 'dbt models every decision, review and delivery attempt, and scores each extractor against the synthetic ground truth. Two Metabase dashboards are built through the API, and a live KPI report is published to GitHub Pages.',
+      points: ['17 models, 42 tests, PASS=59', 'Supplier compliance over time', 'Live KPI report on GitHub Pages']
+    }
+  ],
+
+  gallery: {
+    flow: [
+      { src: 'assets/img/bantay-n8n-intake.png', w: 1100, h: 687, caption: 'n8n document intake workflow: a 5-minute schedule and a webhook call the Bantay API.' },
+      { src: 'assets/img/bantay-review-page.png', w: 1100, h: 696, caption: 'Review queue: why the document needs a person, both extractions side by side, and a correction form.' },
+      { src: 'assets/img/bantay-mailpit-alerts.png', w: 1100, h: 687, caption: 'Expiry alert emails to operations, one per document and threshold.' }
+    ],
+    ops: [
+      { src: 'assets/img/bantay-document-operations-1.png', w: 1100, h: 839, caption: 'Document Operations: daily intake by outcome, review reasons and outcome by document type.' },
+      { src: 'assets/img/bantay-document-operations-2.png', w: 1100, h: 335, caption: 'Extraction quality by layout (rules parser, LLM, final) and the current review queue.' }
+    ],
+    compliance: [
+      { src: 'assets/img/bantay-supplier-compliance-1.png', w: 1100, h: 839, caption: 'Supplier Compliance: compliance over time, alerts by threshold, watchlist and coverage gaps.' },
+      { src: 'assets/img/bantay-supplier-compliance-2.png', w: 1100, h: 243, caption: 'Delivery: emails and CRM calls, unknown outcomes, recoveries and rate limits.' }
+    ]
+  }
+};
