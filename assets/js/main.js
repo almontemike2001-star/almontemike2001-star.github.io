@@ -60,9 +60,10 @@
   /* ---------- Active nav link ---------- */
   var linkMap = {};
   $$('.nav-links a').forEach(function (a) { linkMap[a.getAttribute('href').slice(1)] = a; });
-  linkMap.pourstream = linkMap.project;
-  linkMap.hatid = linkMap.project;
-  linkMap.bantay = linkMap.project;
+  linkMap.project = linkMap.projects;
+  linkMap.pourstream = linkMap.projects;
+  linkMap.hatid = linkMap.projects;
+  linkMap.bantay = linkMap.projects;
   if ('IntersectionObserver' in window) {
     var spy = new IntersectionObserver(function (entries) {
       entries.forEach(function (en) {
@@ -265,31 +266,6 @@
     try { document.execCommand('copy'); } catch (e) {}
     ta.remove();
   }
-
-  /* ---------- Contact form → mailto ---------- */
-  var form = $('#contact-form');
-  function fieldError(input, msg) {
-    var err = input.parentElement.querySelector('.err');
-    input.setAttribute('aria-invalid', msg ? 'true' : 'false');
-    if (err) err.textContent = msg || '';
-    return !msg;
-  }
-  form.addEventListener('submit', function (e) {
-    e.preventDefault();
-    var name = form.elements.name, msg = form.elements.message;
-    var ok = fieldError(name, name.value.trim() ? '' : 'Please add your name.');
-    ok = fieldError(msg, msg.value.trim().length >= 10 ? '' : 'Please write a short message (10+ characters).') && ok;
-    if (!ok) { (name.value.trim() ? msg : name).focus(); return; }
-    var company = form.elements.company.value.trim();
-    var topic = form.elements.topic.value;
-    var subject = topic + ' – from ' + name.value.trim() + (company ? ' (' + company + ')' : '');
-    var body = msg.value.trim() + '\n\n— ' + name.value.trim() + (company ? '\n' + company : '');
-    window.location.href = 'mailto:almontemike2001@gmail.com?subject=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(body);
-    showToast('Opening your email app…');
-  });
-  $$('input, textarea', form).forEach(function (i) {
-    i.addEventListener('input', function () { if (i.getAttribute('aria-invalid') === 'true') fieldError(i, ''); });
-  });
 
   /* ---------- Footer year ---------- */
   $('#year').textContent = new Date().getFullYear();
