@@ -75,46 +75,6 @@
     Object.keys(linkMap).forEach(function (id) { var s = document.getElementById(id); if (s) spy.observe(s); });
   }
 
-  /* ---------- Count-up numbers ---------- */
-  function formatCount(elm, v) {
-    var dec = parseInt(elm.dataset.decimals || '0', 10);
-    var s = elm.dataset.format === 'int'
-      ? Math.round(v).toLocaleString('en-US')
-      : v.toFixed(dec);
-    return (elm.dataset.prefix || '') + s + (elm.dataset.suffix || '');
-  }
-  function countUp(elm) {
-    var target = parseFloat(elm.dataset.count);
-    if (reduceMotion) { elm.textContent = formatCount(elm, target); return; }
-    var start = null, dur = 1100;
-    function tick(ts) {
-      if (!start) start = ts;
-      var p = Math.min(1, (ts - start) / dur);
-      var eased = 1 - Math.pow(1 - p, 3);
-      elm.textContent = formatCount(elm, target * eased);
-      if (p < 1) requestAnimationFrame(tick);
-    }
-    requestAnimationFrame(tick);
-  }
-
-  /* ---------- Reveal on scroll ---------- */
-  var counters = $$('[data-count]');
-  if ('IntersectionObserver' in window && !reduceMotion) {
-    root.classList.add('js-reveal');
-    var io = new IntersectionObserver(function (entries) {
-      entries.forEach(function (en) {
-        if (!en.isIntersecting) return;
-        en.target.classList.add('in');
-        $$('[data-count]', en.target).forEach(countUp);
-        if (en.target.hasAttribute('data-count')) countUp(en.target);
-        io.unobserve(en.target);
-      });
-    }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
-    $$('.reveal').forEach(function (n) { io.observe(n); });
-    // Counters outside .reveal blocks (hero)
-    counters.filter(function (c) { return !c.closest('.reveal'); }).forEach(countUp);
-  }
-
   /* ---------- Pipeline (one per project) ---------- */
   function initPipeline(pipe, detail, data, startIndex) {
     data.forEach(function (s, i) {
